@@ -13,13 +13,11 @@
     "functionAppName": {
       "defaultValue": null,
       "type": "string"
-    },
-    "config_web_name": {
-      "defaultValue": "reading2dev/web",
-      "type": "string"
     }
   },
-  "variables": {},
+  "variables": {
+    
+  },
   "resources": [
     {
       "type": "Microsoft.Storage/storageAccounts",
@@ -87,13 +85,13 @@
         "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('appPlanName'))]"
       },
       "dependsOn": [
-        "[resourceId('Microsoft.Web/serverfarms', parameters('appPlanName'))]"
+        "[resourceId('Microsoft.Web/serverfarms', parameters('appPlanName'))]",
+        "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName'))]"
       ]
-    } /*,
+    } ,
     {
-      "comments": "Generalized from resource: '/subscriptions/867feb0a-8313-464d-ad48-b4904383f9bc/resourceGroups/Reading2Dev/providers/Microsoft.Web/sites/reading2dev/config/web'.",
       "type": "Microsoft.Web/sites/config",
-      "name": "[parameters('config_web_name')]",
+      "name": "[concat(parameters('functionAppName'), '/web')]",
       "apiVersion": "2015-08-01",
       "location": "[resourceGroup().location]",
       "properties": {
@@ -120,7 +118,7 @@
         "httpLoggingEnabled": false,
         "logsDirectorySizeLimit": 35,
         "detailedErrorLoggingEnabled": false,
-        "publishingUsername": "$reading2dev",
+        "publishingUsername": "[concat('$', parameters('functionAppName'))]",
         "publishingPassword": null,
         "appSettings": null,
         "metadata": null,
@@ -206,6 +204,5 @@
         "[resourceId('Microsoft.Web/sites', parameters('functionAppName'))]"
       ]
     }
-      */
   ]
 }

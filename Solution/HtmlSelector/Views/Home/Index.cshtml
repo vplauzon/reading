@@ -1,0 +1,25 @@
+﻿@model HtmlSelector.ViewModels.SelectorViewModel
+@{
+    ViewBag.Title = "Home";
+}
+<header>
+    <h1>HTML Content Selector - @Program.ApplicationVersion</h1>
+</header>
+<div class="content">
+    <form>
+        <p>
+            <label>Sample online Document URL</label>
+        </p>
+        <p>
+            <input id="sampleUrl" size="120" value="@Model.SampleUrl" />
+        </p>
+        <p>
+            <label>Selection Policy</label>
+        </p>
+        <p>
+            <textarea id="policy" cols="120" rows="12">@Model.SelectionPolicy</textarea>
+        </p>
+    </form>
+    <div id="result" style="border-color:blueviolet;border-style:solid;padding:5px" />
+    <script src="~/js/Selector.js" onload="startScript()"></script>
+</div>
