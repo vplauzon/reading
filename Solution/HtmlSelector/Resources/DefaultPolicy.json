@@ -1,4 +1,4 @@
 ﻿{
   "pathPrefix": "",
-  "xpath": "//article"
+  "xpaths": [ "//article" ]
 }

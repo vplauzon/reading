@@ -9,7 +9,7 @@ namespace HtmlSelector.ViewModels
     public class SelectorViewModel
     {
         public string SampleUrl { get; set; } =
-            "https://azure.microsoft.com/en-us/blog/visual-studio-team-services-may-2017-digest/";
+            "http://www.msn.com/en-ca/entertainment/celebrity/these-are-the-10-celebrity-scandals-people-just-cant-let-go-of/ss-BBBJeBd";
 
         public string SelectionPolicy { get; set; } = CoreResources.DefaultPolicy;
     }
