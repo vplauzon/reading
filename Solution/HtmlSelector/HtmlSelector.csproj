@@ -23,6 +23,9 @@
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="1.0.1" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ContentContract\ContentContract.csproj" />
+  </ItemGroup>
+  <ItemGroup>
     <Compile Update="Resources\CoreResources.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>

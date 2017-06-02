@@ -1,32 +1,83 @@
-﻿function startScript() {
-    var sampleUrl = document.getElementById('sampleUrl');
-    var policy = document.getElementById('policy');
+﻿function getSampleUrl() {
+    return document.getElementById('sampleUrl');
+}
 
+function getPolicy() {
+    return document.getElementById('policy');
+}
+
+function getResult() {
+    return document.getElementById('result');
+}
+
+function displayPolicyError(isError) {
+    var policy = getPolicy();
+    var result = getResult();
+
+    if (isError) {
+        policy.classList.add("error");
+        result.classList.add("error");
+        result.classList.remove("success");
+    } else {
+        policy.classList.remove("error");
+        result.classList.add("success");
+        result.classList.remove("error");
+    }
+}
+
+function displayResultError(isError) {
+    var result = getResult();
+
+    if (isError) {
+        result.classList.add("error");
+        result.classList.remove("success");
+    } else {
+        result.classList.add("success");
+        result.classList.remove("error");
+    }
+}
+
+function startScript() {
     //  Update one on start
-    updateProxy(sampleUrl.value, policy.value)
+    updateProxy()
 
     //  Update when the sample URL is changed
     sampleUrl.oninput = function () {
-        updateProxy(sampleUrl.value, policy.value)
+        updateProxy()
     };
     //  Update when the policy is changed
     policy.oninput = function () {
-        updateProxy(sampleUrl.value, policy.value)
+        updateProxy()
     };
 }
 
 function updateProxy(sampleUrl, policy) {
-    var result = document.getElementById('result');
-    var xhr = new XMLHttpRequest();
+    try {
+        var policy = getPolicy();
+        var policyObj = JSON.parse(policy.innerHTML);
+        var url = getSampleUrl().value;
+        var payload = {
+            url: url,
+            policy: policyObj
+        };
+        var xhr = new XMLHttpRequest();
+        var result = getResult();
 
-    xhr.onreadystatechange = function () {
-        if (xhr.status === 200) {
-            result.innerHTML = xhr.responseText
-        }
-    };
-    xhr.open("POST", "/api/proxy", true);
-    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    xhr.send("sampleUrl=" + encodeURI(sampleUrl) + "&selectionPolicy=" + encodeURI(policy));
-
-    result.innerHTML = xhr.response;
+        displayPolicyError(false);
+        xhr.onreadystatechange = function () {
+            if (xhr.status === 200) {
+                result.innerHTML = xhr.responseText
+                displayResultError(false);
+            }
+            else {
+                displayResultError(true);
+            }
+        };
+        xhr.open("POST", "/api/proxy", true);
+        xhr.setRequestHeader("Content-type", "application/json");
+        xhr.send(JSON.stringify(payload));
+    }
+    catch (err) {
+        displayPolicyError(true);
+    }
 }
