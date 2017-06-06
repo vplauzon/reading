@@ -57,7 +57,7 @@ function updateProxy(sampleUrl, policy) {
         var policyObj = JSON.parse(policy.innerHTML);
         var url = getSampleUrl().value;
         var payload = {
-            url: url,
+            requestUrl: url,
             policy: policyObj
         };
         var xhr = new XMLHttpRequest();

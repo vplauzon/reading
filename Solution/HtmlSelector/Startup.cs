@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using HtmlSelector.Configuration;
 
 namespace HtmlSelector
 {
@@ -29,6 +30,8 @@ namespace HtmlSelector
         {
             // Add framework services.
             services.AddMvc();
+
+            services.Configure<ApiConfiguration>(Configuration.GetSection("apiConfiguration"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

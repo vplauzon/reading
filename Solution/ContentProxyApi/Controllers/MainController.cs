@@ -3,42 +3,23 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using ContentContract;
+using ApiLib;
 
 namespace ContentProxyApi.Controllers
 {
     [Route("/")]
     public class MainController : Controller
     {
-        // GET api/values
-        [HttpGet]
-        public IEnumerable<string> Get()
+        public async Task Post([FromBody]ProxyRequestModel model)
         {
-            return new string[] { "value1", "value2" };
-        }
+            var proxyRequest = new HttpRequest
+            {
+                Payload = await HttpHelper.ReadStreamAsync(Request.Body)
+            };
+            var proxyResponse = await HttpHelper.GetAsync(new Uri(model.RequestUrl), proxyRequest);
 
-        // GET api/values/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
-
-        // POST api/values
-        [HttpPost]
-        public void Post([FromBody]string value)
-        {
-        }
-
-        // PUT api/values/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
-        {
-        }
-
-        // DELETE api/values/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
+            await HttpHelper.WriteStreamAsync(proxyResponse.Payload, Response.Body);
         }
     }
 }
