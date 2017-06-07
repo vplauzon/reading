@@ -39,16 +39,46 @@ namespace ContentProxyApi
 
             doc.LoadHtml(html);
 
+            var titleNode = doc.DocumentNode.SelectSingleNode("//title");
+            var title = titleNode == null ? string.Empty : titleNode.InnerText;
+            var nextUrl = SelectNextUrl(doc.DocumentNode, policy.NextUrlXPath);
             var nodes = from path in policy.XPaths
                         select doc.DocumentNode.SelectSingleNode(path);
             var fragments = from n in nodes
                             let scrubbed = Scrub(n)
                             select scrubbed.OuterHtml;
-            var titleNode = doc.DocumentNode.SelectSingleNode("//title");
-            var title = titleNode == null ? string.Empty : titleNode.InnerText;
             var body = string.Join(Environment.NewLine, fragments);
 
-            return new ContentDocument(title, null, body);
+            return new ContentDocument(title, new Uri(nextUrl), body);
+        }
+
+        private static string SelectNextUrl(HtmlNode node, string nextUrlXPath)
+        {
+            if (!string.IsNullOrWhiteSpace(nextUrlXPath))
+            {
+                var urlNode = node.SelectSingleNode(nextUrlXPath);
+
+                if (urlNode != null)
+                {
+                    var lastPart = nextUrlXPath.Split('/').Last();
+
+                    if (lastPart.StartsWith("@"))
+                    {
+                        var attribute = urlNode.Attributes[lastPart.Substring(1)];
+
+                        if (attribute != null)
+                        {
+                            return attribute.Value;
+                        }
+                    }
+                    else
+                    {
+                        return urlNode.InnerHtml;
+                    }
+                }
+            }
+
+            return string.Empty;
         }
 
         public ContentDocument Merge(ContentDocument document)

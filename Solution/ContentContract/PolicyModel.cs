@@ -6,5 +6,6 @@ namespace ContentContract
     {
         public string PathPrefix { get; set; }
         public string[] XPaths { get; set; }
+        public string NextUrlXPath { get; set; }
     }
 }

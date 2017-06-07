@@ -1,4 +1,5 @@
 ﻿{
   "pathPrefix": "",
-  "xpaths": [ "//body" ]
+  "xpaths": [ "//body" ],
+  "nextUrlXPath": "//a[starts-with(., 'NEXT')]/@href"
 }
