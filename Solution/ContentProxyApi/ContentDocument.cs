@@ -15,6 +15,11 @@ namespace ContentProxyApi
 
         public Uri NextUrl { get; private set; }
 
+        public bool IsNextUrl
+        {
+            get { return NextUrl != null && !string.IsNullOrWhiteSpace(NextUrl.OriginalString); }
+        }
+
         public string Html
         {
             get
@@ -45,11 +50,12 @@ namespace ContentProxyApi
             var nodes = from path in policy.XPaths
                         select doc.DocumentNode.SelectSingleNode(path);
             var fragments = from n in nodes
+                            where n != null
                             let scrubbed = Scrub(n)
                             select scrubbed.OuterHtml;
             var body = string.Join(Environment.NewLine, fragments);
 
-            return new ContentDocument(title, new Uri(nextUrl), body);
+            return new ContentDocument(title, new Uri(nextUrl, UriKind.RelativeOrAbsolute), body);
         }
 
         private static string SelectNextUrl(HtmlNode node, string nextUrlXPath)
@@ -83,7 +89,9 @@ namespace ContentProxyApi
 
         public ContentDocument Merge(ContentDocument document)
         {
-            throw new NotImplementedException();
+            var newBody = _body + Environment.NewLine + document._body;
+
+            return new ContentDocument(Title, document.NextUrl, newBody);
         }
 
         public ContentDocument MapImages()

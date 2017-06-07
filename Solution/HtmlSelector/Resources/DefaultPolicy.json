@@ -1,5 +1,5 @@
 ﻿{
   "pathPrefix": "",
-  "xpaths": [ "//body" ],
+  "xpaths": [ "//div[@class='content']" ],
   "nextUrlXPath": "//a[starts-with(., 'NEXT')]/@href"
 }
